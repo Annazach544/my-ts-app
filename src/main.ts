@@ -7,8 +7,10 @@ let courses: Course[] = [];
 
 document.addEventListener("DOMContentLoaded", init);
 
-function init(): void {
+async function init(): Promise<void> {
   console.log("Appen startar!");
+  await fetchCourses(); 
+  fillTable();
 }
 
 async function fetchCourses(): Promise<void> {
@@ -25,4 +27,28 @@ async function fetchCourses(): Promise<void> {
   } catch (error) {
     console.error("Fel:", error);
   }
+}
+function fillTable(): void {
+  const tableBody = document.querySelector<HTMLTableSectionElement>("#courseTable");
+  if (!tableBody) return;
+
+  tableBody.innerHTML = "";
+
+  courses.forEach(course => {
+    const row = document.createElement("tr");
+
+    const codeCell = document.createElement("td");
+    codeCell.textContent = course.code;
+    row.appendChild(codeCell);
+
+    const nameCell = document.createElement("td");
+    nameCell.textContent = course.coursename;
+    row.appendChild(nameCell);
+
+    const progCell = document.createElement("td");
+    progCell.textContent = course.progression;
+    row.appendChild(progCell);
+
+    tableBody.appendChild(row);
+  });
 }
