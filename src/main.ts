@@ -3,14 +3,21 @@ interface Course {
   coursename: string;
   progression: string;
 }
+
 let courses: Course[] = [];
 
 document.addEventListener("DOMContentLoaded", init);
 
 async function init(): Promise<void> {
   console.log("Appen startar!");
-  await fetchCourses(); 
+  await fetchCourses();
   fillTable();
+
+  // Koppla sökfält
+  const searchInput = document.querySelector<HTMLInputElement>("#searchInput");
+  searchInput?.addEventListener("input", () => {
+    fillTable(searchInput.value);
+  });
 }
 
 async function fetchCourses(): Promise<void> {
@@ -28,27 +35,33 @@ async function fetchCourses(): Promise<void> {
     console.error("Fel:", error);
   }
 }
-function fillTable(): void {
+
+function fillTable(filter: string = ""): void {
   const tableBody = document.querySelector<HTMLTableSectionElement>("#courseTable");
   if (!tableBody) return;
 
   tableBody.innerHTML = "";
 
-  courses.forEach(course => {
-    const row = document.createElement("tr");
+  courses
+    .filter(course =>
+      course.code.toLowerCase().includes(filter.toLowerCase()) ||
+      course.coursename.toLowerCase().includes(filter.toLowerCase())
+    )
+    .forEach(course => {
+      const row = document.createElement("tr");
 
-    const codeCell = document.createElement("td");
-    codeCell.textContent = course.code;
-    row.appendChild(codeCell);
+      const codeCell = document.createElement("td");
+      codeCell.textContent = course.code;
+      row.appendChild(codeCell);
 
-    const nameCell = document.createElement("td");
-    nameCell.textContent = course.coursename;
-    row.appendChild(nameCell);
+      const nameCell = document.createElement("td");
+      nameCell.textContent = course.coursename;
+      row.appendChild(nameCell);
 
-    const progCell = document.createElement("td");
-    progCell.textContent = course.progression;
-    row.appendChild(progCell);
+      const progCell = document.createElement("td");
+      progCell.textContent = course.progression;
+      row.appendChild(progCell);
 
-    tableBody.appendChild(row);
-  });
+      tableBody.appendChild(row);
+    });
 }
