@@ -65,3 +65,19 @@ function fillTable(filter: string = ""): void {
       tableBody.appendChild(row);
     });
 }
+
+function sortTable(key: keyof Course): void {
+  courses.sort((a, b) => {
+    if (a[key] < b[key]) return -1;
+    if (a[key] > b[key]) return 1;
+    return 0;
+  });
+  fillTable();
+}
+const headers = document.querySelectorAll<HTMLTableCellElement>("th[data-sort]");
+headers.forEach(header => {
+  header.addEventListener("click", () => {
+    const sortKey = header.getAttribute("data-sort") as keyof Course;
+    sortTable(sortKey);
+  });
+});
