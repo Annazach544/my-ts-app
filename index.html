@@ -8,9 +8,19 @@
 <body>
 <div class="container">
     <h1>Ramschema - Webbutveckling</h1>
-
     <input type="text" id="searchInput" placeholder="Sök kurskod eller kursnamn...">
-
+  <form id="addCourseForm">
+  <input type="text" id="courseCode" placeholder="Kurskod" required />
+  <input type="text" id="courseName" placeholder="Kursnamn" required />
+  <select id="courseProgression" required>
+    <option value="">Välj progression</option>
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+  </select>
+  <input type="url" id="courseSyllabus" placeholder="URL till kursplan" required />
+  <button type="submit">Lägg till kurs</button>
+  </form>
     <table>
         <thead>
             <tr>

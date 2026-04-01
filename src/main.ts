@@ -3,7 +3,8 @@ import './style.css';
 interface Course {
   code: string;
   coursename: string;
-  progression: string;
+  progression: 'A' | 'B' | 'C';
+  syllabus: string;
 }
 
 let courses: Course[] = [];
