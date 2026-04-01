@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>my-ts-app</title>
+  </head>
+<body>
+  <h1>Kurslista</h1>
+
+  <input id="searchInput" placeholder="Sök kurs..." />
+
+  <table>
+    <thead>
+      <tr>
+        <th data-sort="code">Kod</th>
+        <th data-sort="coursename">Namn</th>
+        <th data-sort="progression">Progression</th>
+      </tr>
+    </thead>
+    <tbody id="courseTable"></tbody>
+  </table>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
