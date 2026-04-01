@@ -1,3 +1,5 @@
+import './style.css';
+
 interface Course {
   code: string;
   coursename: string;
@@ -5,6 +7,7 @@ interface Course {
 }
 
 let courses: Course[] = [];
+let sortOrder: boolean = true;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -68,10 +71,12 @@ function fillTable(filter: string = ""): void {
 
 function sortTable(key: keyof Course): void {
   courses.sort((a, b) => {
-    if (a[key] < b[key]) return -1;
-    if (a[key] > b[key]) return 1;
+    if (a[key] < b[key]) return sortOrder ? -1 : 1;
+    if (a[key] > b[key]) return sortOrder ? 1 : -1;
     return 0;
   });
+
+  sortOrder = !sortOrder;
   fillTable();
 }
 const headers = document.querySelectorAll<HTMLTableCellElement>("th[data-sort]");
