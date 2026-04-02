@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", init);
 async function init(): Promise<void> {
   console.log("Appen startar!");
   await fetchCourses();
+  loadCourses();
   fillTable();
 
   // Koppla sökfält
@@ -87,3 +88,44 @@ headers.forEach(header => {
     sortTable(sortKey);
   });
 });
+function saveCourses(): void {
+  localStorage.setItem('courses', JSON.stringify(courses));
+}
+
+function loadCourses(): void {
+  const data = localStorage.getItem('courses');
+  if (data) courses = JSON.parse(data) as Course[];
+}
+
+function addCourse(event: Event): void {
+  event.preventDefault();
+
+  const codeInput = document.querySelector<HTMLInputElement>('#courseCode')!;
+  const nameInput = document.querySelector<HTMLInputElement>('#courseName')!;
+  const progSelect = document.querySelector<HTMLSelectElement>('#courseProgression')!;
+  const syllabusInput = document.querySelector<HTMLInputElement>('#courseSyllabus')!;
+
+  const newCourse: Course = {
+    code: codeInput.value.trim(),
+    coursename: nameInput.value.trim(),
+    progression: progSelect.value as 'A' | 'B' | 'C',
+    syllabus: syllabusInput.value.trim(),
+  };
+
+  if (courses.some(c => c.code === newCourse.code)) {
+    alert('Kurskoden finns redan!');
+    return;
+  }
+
+  courses.push(newCourse);
+  saveCourses();
+  fillTable();
+
+  codeInput.value = '';
+  nameInput.value = '';
+  progSelect.value = '';
+  syllabusInput.value = '';
+}
+
+const form = document.querySelector<HTMLFormElement>('#addCourseForm');
+form?.addEventListener('submit', addCourse);
