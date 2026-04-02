@@ -13,12 +13,10 @@ let sortOrder: boolean = true;
 document.addEventListener("DOMContentLoaded", init);
 
 async function init(): Promise<void> {
-  console.log("Appen startar!");
   await fetchCourses();
   loadCourses();
   fillTable();
 
-  // Koppla sökfält
   const searchInput = document.querySelector<HTMLInputElement>("#searchInput");
   searchInput?.addEventListener("input", () => {
     fillTable(searchInput.value);
@@ -34,7 +32,6 @@ async function fetchCourses(): Promise<void> {
     }
 
     courses = await response.json() as Course[];
-    console.log(courses);
 
   } catch (error) {
     console.error("Fel:", error);
@@ -67,6 +64,19 @@ function fillTable(filter: string = ""): void {
       progCell.textContent = course.progression;
       row.appendChild(progCell);
 
+      const deleteCell = document.createElement("td");
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Ta bort";
+
+      deleteBtn.addEventListener("click", () => {
+        courses = courses.filter(c => c.code !== course.code);
+        saveCourses();
+        fillTable();
+      });
+
+      deleteCell.appendChild(deleteBtn);
+      row.appendChild(deleteCell);
+
       tableBody.appendChild(row);
     });
 }
@@ -81,6 +91,7 @@ function sortTable(key: keyof Course): void {
   sortOrder = !sortOrder;
   fillTable();
 }
+
 const headers = document.querySelectorAll<HTMLTableCellElement>("th[data-sort]");
 headers.forEach(header => {
   header.addEventListener("click", () => {
@@ -88,6 +99,7 @@ headers.forEach(header => {
     sortTable(sortKey);
   });
 });
+
 function saveCourses(): void {
   localStorage.setItem('courses', JSON.stringify(courses));
 }
